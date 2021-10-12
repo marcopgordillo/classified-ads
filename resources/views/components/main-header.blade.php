@@ -12,8 +12,8 @@
       <a href="#" class="mr-5 hover:text-gray-900">Stores</a>
       <a href="#" class="mr-5 hover:text-gray-900">Contact</a>
       @guest
-      <a href="#" class="mr-5 hover:text-gray-900">Login</a>
-      <a href="#" class="mr-5 hover:text-gray-900">Register</a>
+      <a href="{{ route('login') }}" class="mr-5 hover:text-gray-900">Login</a>
+      <a href="{{ route('register') }}" class="mr-5 hover:text-gray-900">Register</a>
       @else
       <a href="#" class="mr-5 hover:text-gray-900">{{ auth()->user()->name }}</a>
       @endguest
