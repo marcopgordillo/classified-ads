@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -28,7 +29,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        $categories = Category::all();
+        return view('admin.categories.create', compact('categories'));
     }
 
     /**
@@ -39,19 +41,25 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('categories', 'public');
-
-            Category::create([
+        $data = [
                 'name'  =>  $request->name,
                 'slug'  =>  Str::slug($request->name),
-                'image' =>  $path,
-            ]);
+                'parent_id' => $request->parent_id !== 'null'? $request->parent_id : NULL,
+        ];
 
-            return redirect()->route('categories.index');
+        if ($request->hasFile('image')) {
+            try {
+                $path = $request->file('image')->store('categories', 'public');
+
+                $data['image'] = $path;
+            } catch (\Throwable $th) {
+                return redirect()->route('categories.index')->with('error', 'Sorry there was a problem!');
+            }
         }
 
-        return redirect()->route('categories.index')->with('You must upload a image Url');
+        Category::create($data);
+
+        return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -71,9 +79,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        $children_ids = $this->find_ids($category, []);
+
+        $categories = Category::where([
+            ['id', '<>', $category->id],
+        ])->whereNotIn('id', $children_ids)
+            ->get();
+
+        return view('admin.categories.edit', compact('category', 'categories'));
     }
 
     /**
@@ -83,9 +98,31 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $data_updated = [
+                    'name'  =>  $request->name,
+                    'slug'  =>  Str::slug($request->name),
+                    'parent_id' => $request->parent_id !== 'null'? $request->parent_id : NULL,
+
+        ];
+
+        if ($request->hasFile('image')) {
+            try {
+                $path = $request->file('image')->store('categories', 'public');
+
+                Storage::disk('public')->delete($category->image);
+
+                $data_updated['image'] = $path;
+
+            } catch (\Throwable $th) {
+                return redirect()->route('categories.index')->with('error', 'Sorry there was a problem');
+            }
+        }
+
+        $category->update($data_updated);
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -94,8 +131,31 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        if ($category->image) {
+            try {
+                Storage::disk('public')->delete($category->image);
+            } catch (\Throwable $th) {
+                return redirect()->route('categories.index')->with('error', 'Sorry there was a problem');
+            }
+        }
+
+        $category->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
+    }
+
+    private function find_ids($child, $ids) {
+        if (isset($child->children)) {
+            if ($child->children->count() > 0) {
+                $ids = $child->children->flatMap(function($value, $key) {
+                    $ids = $this->find_ids($value, []);
+                    return [$value->id, ...$ids];
+                });
+            }
+        }
+
+        return $ids;
     }
 }

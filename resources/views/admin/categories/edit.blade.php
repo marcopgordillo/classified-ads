@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('New Category') }}
+            {{ $category->name }}
         </h2>
     </x-slot>
 
@@ -21,12 +21,13 @@
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Create Category') }}</h3>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ __('Edit Category') }}</h3>
                             </div>
                         </div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form action="{{ route('categories.store') }}" enctype="multipart/form-data" method="POST">
+                            <form action="{{ route('categories.update', $category->id) }}" enctype="multipart/form-data" method="POST">
                                 @csrf
+                                @method('PUT')
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                     <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                         <div class="grid grid-cols-3 gap-6">
@@ -39,15 +40,18 @@
                                                     <input type="text" name="name"
                                                         id="name"
                                                         class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                                                        placeholder="Category Name">
+                                                        value="{{ $category->name }}">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label for="image" class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700">
                                                 Image
                                             </label>
+                                            <div class="w-full m-2 p-2">
+                                                <img class="h-32 w-32" src="{{ asset("storage/{$category->image}") }}" alt="">
+                                            </div>
                                             <div class="mt-1 flex items-center">
                                                 <input type="file" id="image" name="image" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" />
                                             </div>
@@ -60,8 +64,13 @@
                                             <div class="mt-1 flex items-center">
                                                 <select id="parent_id" name="parent_id" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
                                                     <option value="null">Select a parent category</option>
-                                                    @foreach ($categories as $category)
-                                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @foreach ($categories as $category_d)
+                                                        <option
+                                                            value="{{ $category_d->id }}"
+                                                            @if ($category_d->id === $category->parent_id)selected                                                      @endif
+                                                        >
+                                                            {{ $category_d->name }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -76,6 +85,25 @@
                                 </div>
                             </form>
                         </div>
+                        <form
+                            action="{{ route('categories.destroy', $category->id) }}"
+                            method="POST"
+                            x-data="{
+                                submit() {
+                                    window.confirm('Are you sure?')
+                                    ? $el.submit()
+                                    : false
+                                }
+                            }"
+                            @submit.prevent="submit"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

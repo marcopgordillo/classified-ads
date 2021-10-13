@@ -1,5 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
+
+        @if(session('success'))
+        <div class="bg-green-600 text-gray-200 m-2 p-2 rounded-md">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+        <div class="bg-pink-600 text-gray-200 m-2 p-2 rounded-md">{{ session('error') }}</div>
+        @endif
+
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Categories') }}
         </h2>
@@ -48,12 +57,12 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center w-20">
-                                            <img class="w-full" src="{{ asset("storage/{$category->image}") }}" alt="">
+                                        <div class="flex items-center">
+                                            <img class="h-12 w-12 rounded-md" src="{{ asset("storage/{$category->image}") }}" alt="">
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        <a href="{{ route('categories.edit', $category->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                     </td>
                                 </tr>
                                 @endforeach
