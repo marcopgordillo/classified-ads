@@ -1,20 +1,20 @@
 <x-app-layout>
     <x-slot name="header">
-
-        @if(session('success'))
-        <div class="bg-green-600 text-gray-200 m-2 p-2 rounded-md">{{ session('success') }}</div>
-        @endif
-
-        @if(session('error'))
-        <div class="bg-pink-600 text-gray-200 m-2 p-2 rounded-md">{{ session('error') }}</div>
-        @endif
-
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Categories') }}
         </h2>
     </x-slot>
 
     <div class="container mx-auto py-12">
+
+        @if(session('success'))
+        <div class="bg-green-600 text-gray-200 m-2 p-2 text-lg text-center">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+        <div class="bg-pink-600 text-gray-200 m-2 p-2 text-lg text-center">{{ session('error') }}</div>
+        @endif
+
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block w-full sm:px-6 lg:px-8">
@@ -44,7 +44,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach ($categories as $category)
+                                @forelse ($categories as $category)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -65,7 +65,15 @@
                                         <a href="{{ route('categories.edit', $category->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                     </td>
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td>
+                                        <div class="m-2 p-2">
+                                            No Categories
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

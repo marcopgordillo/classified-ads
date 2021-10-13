@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +30,11 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::all()
+            ->filter(function($value, $key) {
+                return $this->max_parents($value, 2);
+            });
+
         return view('admin.categories.create', compact('categories'));
     }
 
@@ -86,7 +91,10 @@ class CategoryController extends Controller
         $categories = Category::where([
             ['id', '<>', $category->id],
         ])->whereNotIn('id', $children_ids)
-            ->get();
+            ->get()
+            ->filter(function($value, $key) {
+                return $this->max_parents($value, 2);
+            });
 
         return view('admin.categories.edit', compact('category', 'categories'));
     }
@@ -98,7 +106,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data_updated = [
                     'name'  =>  $request->name,
@@ -157,5 +165,17 @@ class CategoryController extends Controller
         }
 
         return $ids;
+    }
+
+    private function max_parents($object, $max) {
+
+        $parents = 0;
+
+        while (isset($object->parent)) {
+                $object = $object->parent;
+                ++$parents;
+        }
+
+        return $parents < $max;
     }
 }

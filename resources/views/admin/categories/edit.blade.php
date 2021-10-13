@@ -42,6 +42,9 @@
                                                         class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                                                         value="{{ $category->name }}">
                                                 </div>
+                                                @error('name')
+                                                    <div class="text-red-500 text-xs">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
 
@@ -55,6 +58,9 @@
                                             <div class="mt-1 flex items-center">
                                                 <input type="file" id="image" name="image" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" />
                                             </div>
+                                            @error('image')
+                                                <div class="text-red-500 text-xs">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div>
@@ -74,6 +80,9 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            @error('parent_id')
+                                                <div class="text-red-500 text-xs">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="px-4 py-3 bg-gray-50 sm:px-6">
