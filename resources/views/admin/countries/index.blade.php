@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Categories') }}
+            {{ __('Countries') }}
         </h2>
     </x-slot>
 
@@ -19,7 +19,7 @@
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block w-full sm:px-6 lg:px-8">
                     <div class="flex justify-end">
-                        <a href="{{ route('categories.create') }}" class="py-2 px-4 m-2 bg-green-500 hover:bg-green-600 text-gray-50 rounded-md">New Category</a>
+                        <a href="{{ route('countries.create') }}" class="py-2 px-4 m-2 bg-green-500 hover:bg-green-600 text-gray-50 rounded-md">New Country</a>
                     </div>
                 </div>
             </div>
@@ -33,10 +33,7 @@
                                         Name
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Slug
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Image
+                                        Code
                                     </th>
                                     <th scope="col" class="relative px-6 py-3">
                                         <span class="sr-only">Edit</span>
@@ -44,43 +41,37 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse ($categories as $category)
+                                @forelse ($countries as $country)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            {{ $category->name }}
+                                            {{ $country->name }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            {{ $category->slug }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <img class="h-12 w-12 rounded-md" src="{{ asset("storage/{$category->image}") }}" alt="">
+                                            {{ $country->code }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('categories.edit', $category->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        <a href="{{ route('countries.edit', $country->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
                                     <td>
                                         <div class="m-2 p-2">
-                                            No Categories
+                                            No Countries
                                         </div>
                                     </td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
-                        {{ $categories->links() }}
+                        {{ $countries->links() }}
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </x-app-layout>
