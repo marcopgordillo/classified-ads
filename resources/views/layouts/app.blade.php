@@ -46,6 +46,12 @@
                         Categories
                     </x-app-link>
                     <x-app-link
+                        href="{{ route('countries.index') }}"
+                        :active="request()->routeIs('countries.index')"
+                    >
+                        Countries
+                    </x-app-link>
+                    <x-app-link
                         href="#"
                         :active="false"
                     >
