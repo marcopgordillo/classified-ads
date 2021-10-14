@@ -66,7 +66,7 @@
                                             </label>
                                             <div class="mt-1 flex items-center">
                                                 <select id="parent_id" name="parent_id" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
-                                                    <option value="null">Select a parent category</option>
+                                                    <option value="">Select a parent category</option>
                                                     @foreach ($categories as $category)
                                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                                     @endforeach

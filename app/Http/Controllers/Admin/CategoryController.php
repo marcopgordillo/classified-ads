@@ -47,9 +47,9 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = [
-                'name'  =>  $request->name,
-                'slug'  =>  Str::slug($request->name),
-                'parent_id' => $request->parent_id !== 'null'? $request->parent_id : NULL,
+                'name'      =>  $request->name,
+                'slug'      =>  Str::slug($request->name),
+                'parent_id' =>  Str::of($request->parent_id)->isNotEmpty() ? $request->parent_id : NULL,
         ];
 
         if ($request->hasFile('image')) {
@@ -65,17 +65,6 @@ class CategoryController extends Controller
         Category::create($data);
 
         return redirect()->route('categories.index')->with('success', 'Category created successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -109,9 +98,9 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data_updated = [
-                    'name'  =>  $request->name,
-                    'slug'  =>  Str::slug($request->name),
-                    'parent_id' => $request->parent_id !== 'null'? $request->parent_id : NULL,
+            'name'  =>  $request->name,
+            'slug'  =>  Str::slug($request->name),
+            'parent_id' =>  Str::of($request->parent_id)->isNotEmpty() ? $request->parent_id : NULL,
 
         ];
 
