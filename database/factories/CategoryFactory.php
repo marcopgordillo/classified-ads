@@ -26,7 +26,7 @@ class CategoryFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'image' => $this->faker->imageUrl(),
+            'image' => $this->faker->image('public/storage/categories', 640, 480, null, false),
             'parent_id' => null,
         ];
     }

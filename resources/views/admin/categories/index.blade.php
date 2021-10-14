@@ -58,7 +58,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <img class="h-12 w-12 rounded-md" src="{{ asset("storage/{$category->image}") }}" alt="">
+                                            <img class="h-12 w-12 rounded-md" src="{{ asset("storage/categories/{$category->image}") }}" alt="">
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
