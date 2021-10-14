@@ -17,17 +17,16 @@ use App\Http\Controllers\Admin\StateController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'welcome')->name('welcome');
+
+Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+
+    Route::resources([
+        'categories'    =>  CategoryController::class,
+        'countries'     =>  CountryController::class,
+        'states'        =>  StateController::class,
+        'cities'        =>  CityController::class,
+    ]);
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::resources([
-    'categories'    =>  CategoryController::class,
-    'countries'     =>  CountryController::class,
-    'states'        =>  StateController::class,
-    'cities'        =>  CityController::class,
-]);
