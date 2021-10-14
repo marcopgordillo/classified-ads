@@ -46,17 +46,6 @@ class CountryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  Country  $country
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  Country  $country

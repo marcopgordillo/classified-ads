@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\StateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +25,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('categories', CategoryController::class);
-Route::resource('countries', CountryController::class);
+Route::resources([
+    'categories'    =>  CategoryController::class,
+    'countries'     =>  CountryController::class,
+    'states'        =>  StateController::class,
+    'cities'        =>  CityController::class,
+]);

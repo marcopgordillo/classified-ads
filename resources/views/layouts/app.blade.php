@@ -52,6 +52,18 @@
                         Countries
                     </x-app-link>
                     <x-app-link
+                        href="{{ route('states.index') }}"
+                        :active="request()->routeIs('states.index')"
+                    >
+                        States
+                    </x-app-link>
+                    <x-app-link
+                        href="{{ route('cities.index') }}"
+                        :active="request()->routeIs('cities.index')"
+                    >
+                        Cities
+                    </x-app-link>
+                    <x-app-link
                         href="#"
                         :active="false"
                     >
