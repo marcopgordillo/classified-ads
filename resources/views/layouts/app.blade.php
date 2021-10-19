@@ -34,6 +34,13 @@
                 </div>
                 <nav :class="{'block': open, 'hidden': !open}" class="flex-grow px-4 pb-4 md:block md:pb-0 md:overflow-y-auto">
                     <x-app-link
+                        class="!bg-green-500 hover:!bg-green-700 !text-gray-100"
+                        href="{{ route('ads.create') }}"
+                        :active="request()->routeIs('ads.create')"
+                    >
+                        New Listing
+                    </x-app-link>
+                    <x-app-link
                         href="{{ route('dashboard') }}"
                         :active="request()->routeIs('dashboard')"
                     >

@@ -16,6 +16,7 @@ class CreateListingsTable extends Migration
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug')->unique();
             $table->unsignedBigInteger('price');
             $table->tinyInteger('discount');
             $table->text('description');
